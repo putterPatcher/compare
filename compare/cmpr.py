@@ -7,6 +7,9 @@ class tint:
 
     @classmethod
     def iwgrp(cls,li:list|tuple)->tuple[int,...]:
+        """
+            
+        """
         try:
             if (tli:=li.__class__.__name__)=='tuple' or tli=='list':
                 ln=list()
