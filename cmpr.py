@@ -8,8 +8,8 @@ class tint:
     @classmethod
     def iwgrp(cls,li:list|tuple)->tuple[int,...]:
         """
-            li: list or tuple of numbers
-            return a tuple of whole integers ( >= 0 )
+            li: list or tuple of numbers\n
+            returns a tuple of whole integers ( >= 0 )
         """
         try:
             if (tli:=li.__class__.__name__)=='tuple' or tli=='list':
@@ -25,9 +25,9 @@ class tint:
     @classmethod
     def ele(cls,i:int|float|list[int|float]|tuple[int|float,...],ln:int|float)->int|tuple[int,...]:
         """
-            i: integer or float, list or tuple of integer or float
-            ln: length of list or tuple
-            return integer or tuple of integer ( if "i" contains indexes )
+            i: integer or float, list or tuple of integer or float\n
+            ln: length of list or tuple\n
+            returns integer or tuple of integer ( if "i" contains indexes )
         """
         try:
             ln=cls.intn(ln)
@@ -49,8 +49,8 @@ class tint:
     @classmethod
     def intw(cls,i:int|float)->int:
         """
-            i: integer or float
-            return an integer ( >= 0 )
+            i: integer or float\n
+            returns an integer ( >= 0 )
         """
         try:
             if (j:=int(i))<0:raise Exception(str(i)+" < 0");
@@ -61,8 +61,8 @@ class tint:
     @classmethod
     def intn(cls,i:int|float)->int:
         """
-            i: integer or float
-            return an integer ( > 0 )
+            i: integer or float\n
+            returns an integer ( > 0 )
         """
         try:
             if (j:=int(i))>0:return j;
@@ -73,8 +73,8 @@ class tint:
     @staticmethod
     def int(i:int|float)->int:
         """
-            i: integer or float
-            return an integer
+            i: integer or float\n
+            returns an integer
         """
         try:return int(i);
         except Exception as e:retrn('c',e+"\n"+str(i)+" is not int");
@@ -84,6 +84,10 @@ class tdeciml:
 
     @staticmethod
     def dall(li:list|list[list]|tuple[tuple]|tuple)->tuple[Decimal,...]|tuple[tuple[Decimal,...],...]:
+        """
+            li: list or tuple of numbers, list or tuple of list or tuple of numbers\n
+            returns tuple of Decimal objects, tuple of Decimal objects
+        """
         try:
             if (tli:=li.__class__.__name__)=='tuple' or tli=='list':
                 if (tli0 := li[0].__class__.__name__)=='list' or tli0=='tuple':
@@ -107,6 +111,10 @@ class tdeciml:
     # return if positive float
     @staticmethod
     def decip(a:float|int)->Decimal:
+        """
+            a: float or int\n
+            returns Decimal object ( greater than zero )
+        """
         try:
             if (an:=deciml(a))>0 or an!=Decimal('NaN') or an!=Decimal('Inf') or an!=Decimal('-Inf'):return an;
             else:raise Exception(str(a)+" is <=0/NaN/Inf/-Inf");  
@@ -115,6 +123,10 @@ class tdeciml:
 
 def eqval(a,b)->bool:
     try:
+        """
+            a, b: values\n
+            retuns True if values are equal
+        """
         if a==b:return True;
         else:raise Exception(str(a)+" != "+str(b));
     except Exception as e:retrn('c',e);
@@ -235,4 +247,3 @@ class tdict:
             if len(b)==0:return True;
             else:raise Exception;
         except Exception:retrn('c',"Keys are not same");
-
