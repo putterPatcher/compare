@@ -1,4 +1,4 @@
-from deciml import deciml
+from deciml.deciml import deciml, getpr
 from decimal import Decimal
 from terminate import retrn
 
@@ -7,9 +7,10 @@ class tint:
 
     @classmethod
     def iwgrp(cls,li:list|tuple)->tuple[int,...]:
-        """
-            
-        """
+        '''
+#### Returns a tuple of whole integers ( >= 0 ).
+- **li**: List or tuple of numbers
+        '''
         try:
             if (tli:=li.__class__.__name__)=='tuple' or tli=='list':
                 ln=list()
@@ -23,6 +24,11 @@ class tint:
     # return true if i is valid element index
     @classmethod
     def ele(cls,i:int|float|list[int|float]|tuple[int|float,...],ln:int|float)->int|tuple[int,...]:
+        '''
+#### Returns integer or tuple of integer ( if "i" contains indexes ).
+- **i**: Integer or float, list or tuple of integer or float
+- **ln**: Length of list or tuple
+        '''
         try:
             ln=cls.intn(ln)
             if ln is None:raise Exception;
@@ -42,14 +48,22 @@ class tint:
     # check and return whole numbers
     @classmethod
     def intw(cls,i:int|float)->int:
+        '''
+#### Returns an integer ( >= 0 ).
+- **i**: Integer or float
+        '''
         try:
-            if (j:=int(i))<0:raise Exception(str(i)+" <= 0");
+            if (j:=int(i))<0:raise Exception(str(i)+" < 0");
             else:return j;
         except Exception as e:retrn('c',e);
 
     # check and return natural numbers
     @classmethod
     def intn(cls,i:int|float)->int:
+        '''
+#### Returns an integer ( > 0 ).
+- **i**: Integer or float
+        '''
         try:
             if (j:=int(i))>0:return j;
             else:raise Exception(str(i)+" < 0");
@@ -58,6 +72,10 @@ class tint:
     # check and return int
     @staticmethod
     def int(i:int|float)->int:
+        '''
+#### Returns an integer.
+- **i**: Integer or float
+        '''
         try:return int(i);
         except Exception as e:retrn('c',e+"\n"+str(i)+" is not int");
 
@@ -65,7 +83,11 @@ class tint:
 class tdeciml:
 
     @staticmethod
-    def dall(li:list|list[list]|tuple[tuple]|tuple)->tuple[Decimal,...]|tuple[tuple[Decimal,...],...]:
+    def dall(li:list|list[list]|tuple[tuple]|tuple,__pr=getpr())->tuple[Decimal,...]|tuple[tuple[Decimal,...],...]:
+        '''
+#### Returns tuple of Decimal objects, tuple of Decimal objects.
+- **li**: List or tuple of numbers, list or tuple of list or tuple of numbers
+        '''
         try:
             if (tli:=li.__class__.__name__)=='tuple' or tli=='list':
                 if (tli0 := li[0].__class__.__name__)=='list' or tli0=='tuple':
@@ -73,14 +95,14 @@ class tdeciml:
                     for i in li:
                         li2=list()
                         for j in i:
-                            if (j1:=deciml(j))!=Decimal('NaN') or j1!=Decimal('Inf') or j1!=Decimal('-Inf'):li2.append(j1);
+                            if (j1:=deciml(j,__pr))!=Decimal('NaN') or j1!=Decimal('Inf') or j1!=Decimal('-Inf'):li2.append(j1);
                             else:raise Exception(str(j)+" is NaN/Inf/-Inf");
                         li1.append(tuple(li2))
                     return tuple(li1)
                 else:
                     li1=list()
                     for i in li:
-                        if (i1:=deciml(i))!=Decimal('NaN') or i1!=Decimal('Inf') or i1!=Decimal('-Inf'):li1.append(i1);
+                        if (i1:=deciml(i,__pr))!=Decimal('NaN') or i1!=Decimal('Inf') or i1!=Decimal('-Inf'):li1.append(i1);
                         else:raise Exception(str(i)+" is NaN/Inf/-Inf");
                     return tuple(li1)
             else:raise Exception;
@@ -88,14 +110,35 @@ class tdeciml:
 
     # return if positive float
     @staticmethod
-    def decip(a:float|int)->Decimal:
+    def decip(a:float|int|Decimal,__pr=getpr())->Decimal:
+        '''
+#### Returns Decimal object ( greater than zero ).
+- **a**: Float or int
+        '''
         try:
-            if (an:=deciml(a))>0 or an!=Decimal('NaN') or an!=Decimal('Inf') or an!=Decimal('-Inf'):return an;
+            if (an:=deciml(a,__pr))>0 or an!=Decimal('NaN') or an!=Decimal('Inf') or an!=Decimal('-Inf'):return an;
             else:raise Exception(str(a)+" is <=0/NaN/Inf/-Inf");  
         except Exception as e:retrn('c',e);
 
+    @staticmethod
+    def deciml(a:Decimal|list[Decimal]|tuple[Decimal,...])->bool:
+        '''
+#### Returns True if all elements are Decimal.
+- **a**: List or tuple of values or a value
+        '''
+        if a.__class__.__name__=='list' or a.__class__.__name__=='tuple':
+            for i in a:
+                if i.__class__.__name__!='Decimal':return False
+        else:
+            if a.__class__.__name__!='Decimal':return False
+        return True
+
 
 def eqval(a,b)->bool:
+    '''
+#### Returns True if values are equal.
+ - **a, b**: values
+    '''
     try:
         if a==b:return True;
         else:raise Exception(str(a)+" != "+str(b));
@@ -103,6 +146,10 @@ def eqval(a,b)->bool:
 
 
 def tbool(a:bool|list[bool]|tuple[bool],b=None)->bool:
+    '''
+#### Returns True if all values are boolean.
+- **a**: List or tuple of values or a value
+    '''
     try:
         if (ta:=a.__class__.__name__)=='bool':return True;
         if (ta=='list' or ta=='tuple') and b is True:
@@ -113,7 +160,12 @@ def tbool(a:bool|list[bool]|tuple[bool],b=None)->bool:
     except Exception as e:retrn('c',e);
 
 # return True if matx
-def tmatx(a,b=None)->bool:
+def tmatx(a:tuple|list,b=None)->bool:
+    '''
+#### Returns True if all values are matx objects.
+- **a**: List or tuple of values or a value
+- **b**: True for list or tuple of values and False for a single value
+    '''
     try:
         if (ta:=a.__class__.__name__)=='matx':return True;
         if (ta=='list' or ta=='tuple') and b is True:
@@ -126,6 +178,10 @@ def tmatx(a,b=None)->bool:
 
 # return True if tuple
 def ttup(a:tuple|tuple[tuple,...])->bool:
+    '''
+#### Returns True if tuple or tuple of tuples.
+- **a**: Value or tuple of values
+    '''
     try:
         if (ta:=a.__class__.__name__)=='tuple':
             if (ta0:=a[0].__class__.__name__)==ta:
@@ -138,6 +194,10 @@ def ttup(a:tuple|tuple[tuple,...])->bool:
 
 # return list if list
 def tlist(a:list|list[list])->bool:
+    '''
+#### Returns True if list or list of lists.
+- **a**: Value or list of values
+    '''
     try:
         if (ta:=a.__class__.__name__)=='list':
             if (ta0:=a[0].__class__.__name__)==ta:
@@ -151,6 +211,10 @@ def tlist(a:list|list[list])->bool:
 
 # return True if lengths of lists are equal
 def eqllen(a:list[list]|tuple[list,...]|tuple[tuple,...]|list[tuple])->bool:
+    '''
+#### Returns True if list or tuple has lists or tuples of equal lengths.
+- **a**: List/tuple of lists or tuples
+    '''
     try:
         if (ta:=a.__class__.__name__)=='tuple' or ta=='list':
             l0=len(a[0]);c=0;
@@ -163,7 +227,12 @@ def eqllen(a:list[list]|tuple[list,...]|tuple[tuple,...]|list[tuple])->bool:
 
 
 # return true if data
-def tdata(d,b=None)->bool:
+def tdata(d:list|tuple,b=None)->bool:
+    '''
+#### Returns True if data object or list/tuple of data objects.
+- **d**: Object or list/tuple of objects
+- **b**: True for list/tuple of objects and False for a single object
+    '''
     try:
         if (td:=d.__class__.__name__)=='data':return True;
         if (td=='list' or td=='tuple') and b is True:
@@ -178,6 +247,10 @@ class tfunc:
 
     @staticmethod
     def axn(a)->bool:
+        '''
+#### Returns True if axn object.
+- **a**: Object
+        '''
         try:
             if (ta:=a.__class__.__name__)=='axn':return True;
             else:raise Exception(ta+" is not axn");
@@ -185,6 +258,10 @@ class tfunc:
 
     @staticmethod
     def poly(a)->bool:
+        '''
+#### Returns True if poly object.
+- **a**: Object
+        '''
         try:
             if (ta:=a.__class__.__name__)=='poly':return True;
             else:raise Exception(ta+" is not poly");
@@ -192,6 +269,10 @@ class tfunc:
 
     @staticmethod
     def apolyn(a)->bool:
+        '''
+#### Returns True if apolyn object.
+- **a**: Object
+        '''
         try:
             if (ta:=a.__class__.__name__)=='apolyn':return True;
             else:raise Exception(ta+" is not apolyn");
@@ -202,6 +283,10 @@ class tdict:
 
     @staticmethod
     def dic(a:dict)->bool:
+        '''
+#### Returns True if dictionary.
+- **a**: Object
+        '''
         try:
             if (ta:=a.__class__.__name__)=='dict':return True;
             else:raise Exception(ta+" is not dict");
@@ -209,6 +294,11 @@ class tdict:
 
     @classmethod
     def matchkeys(cls,a:dict,b:dict)->bool:
+        '''
+#### Returns True if all keys match for two dictionaries.
+- **a**: Dictionary
+- **b**: Dictionary
+        '''
         try:
             if cls.dic(a) is None or cls.dic(b) is None:raise Exception;
             a=a.keys();b=list(b.keys());
