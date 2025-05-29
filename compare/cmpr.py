@@ -23,34 +23,34 @@ class tint:
     
     # return true if i is valid element index
     @classmethod
-    def ele(cls,i:int|float|list[int|float]|tuple[int|float,...],ln:int|float)->int|tuple[int,...]:
+    def ele(cls,i:any|list|tuple,ln:int|float,b=None)->int|tuple[int,...]:
         '''
-#### Returns integer or tuple of integer ( if "i" contains indexes ).
-- **i**: Integer or float, list or tuple of integer or float
-- **ln**: Length of list or tuple
+#### Returns integer of "i" or tuple of integers ( if "i" contains indexes ).
+- **i**: Value or list/tuple of values
+- **ln**: Length to compare
         '''
         try:
             ln=cls.intn(ln)
             if ln is None:raise Exception;
-            if (ti:=i.__class__.__name__)=='int' or ti=='float':
+            if not b:
                 i=cls.intw(i)
                 if i>ln-1:raise Exception(str(i)+" is more than "+str(ln-1));
                 return i
-            elif ti=='list' or ti=='tuple':
+            elif ((ti:=i.__class__.__name__)=='list' or ti=='tuple') and b is True:
                 i=cls.iwgrp(i)
                 if i is None:raise Exception;
-            else:raise Exception("Invalid argument: i => int/float");
-            for j in i:
-                if j>ln-1:raise Exception(str(j)+" is more than "+str(ln-1));
-            return i
+                for j in i:
+                    if j>ln-1:raise Exception(str(j)+" is more than "+str(ln-1));
+                return i
+            else:raise Exception("'{}' is not 'list'/'tuple'".format(ti))
         except Exception as e:retrn('c',e);
 
     # check and return whole numbers
     @classmethod
-    def intw(cls,i:int|float)->int:
+    def intw(cls,i:any)->int:
         '''
-#### Returns an integer ( >= 0 ).
-- **i**: Integer or float
+#### Returns an integer ( >= 0 ) for value.
+- **i**: Value
         '''
         try:
             if (j:=int(i))<0:raise Exception(str(i)+" < 0");
@@ -59,10 +59,10 @@ class tint:
 
     # check and return natural numbers
     @classmethod
-    def intn(cls,i:int|float)->int:
+    def intn(cls,i:any)->int:
         '''
-#### Returns an integer ( > 0 ).
-- **i**: Integer or float
+#### Returns an integer ( > 0 ) for value.
+- **i**: Value
         '''
         try:
             if (j:=int(i))>0:return j;
@@ -71,13 +71,13 @@ class tint:
 
     # check and return int
     @staticmethod
-    def int(i:int|float)->int:
+    def int(i:any)->int:
         '''
-#### Returns an integer.
-- **i**: Integer or float
+#### Returns an integer for value.
+- **i**: Value
         '''
         try:return int(i);
-        except Exception as e:retrn('c',e+"\n"+str(i)+" is not int");
+        except Exception as e:retrn('c',"{}\nCannot convert to integer".format(e));
 
 
 class tdeciml:
@@ -87,6 +87,7 @@ class tdeciml:
         '''
 #### Returns tuple of Decimal objects, tuple of Decimal objects.
 - **li**: List or tuple of numbers, list or tuple of list or tuple of numbers
+- **__pr**: Precision
         '''
         try:
             if (tli:=li.__class__.__name__)=='tuple' or tli=='list':
@@ -110,10 +111,11 @@ class tdeciml:
 
     # return if positive float
     @staticmethod
-    def decip(a:float|int|Decimal,__pr=getpr())->Decimal:
+    def decip(a:any,__pr=getpr())->Decimal:
         '''
-#### Returns Decimal object ( greater than zero ).
-- **a**: Float or int
+#### Returns Decimal object ( greater than zero ) for value.
+- **a**: Value
+- **__pr**: Precision
         '''
         try:
             if (an:=deciml(a,__pr))>0 or an!=Decimal('NaN') or an!=Decimal('Inf') or an!=Decimal('-Inf'):return an;
@@ -121,17 +123,19 @@ class tdeciml:
         except Exception as e:retrn('c',e);
 
     @staticmethod
-    def deciml(a:Decimal|list[Decimal]|tuple[Decimal,...])->bool:
+    def deciml(a:any|list|tuple,b=None)->bool:
         '''
 #### Returns True if all elements are Decimal.
 - **a**: List or tuple of values or a value
+- **b**: True for list/tuple of values and False for a value
         '''
-        if a.__class__.__name__=='list' or a.__class__.__name__=='tuple':
+        if b is not True:
+            if a.__class__.__name__=='Decimal':return False
+        if ((ta:=a.__class__.__name__)=='list' or ta=='tuple') and b is True:
             for i in a:
                 if i.__class__.__name__!='Decimal':return False
-        else:
-            if a.__class__.__name__!='Decimal':return False
-        return True
+            return True
+        else:print("{} is not 'list'/'tuple'".format(ta))
 
 
 def eqval(a,b)->bool:
@@ -145,22 +149,23 @@ def eqval(a,b)->bool:
     except Exception as e:retrn('c',e);
 
 
-def tbool(a:bool|list[bool]|tuple[bool],b=None)->bool:
+def tbool(a:any|list|tuple,b=None)->bool:
     '''
 #### Returns True if all values are boolean.
 - **a**: List or tuple of values or a value
+- **b**: True for list or tuple of values and False for a single value
     '''
     try:
         if (ta:=a.__class__.__name__)=='bool':return True;
         if (ta=='list' or ta=='tuple') and b is True:
             for i in a:
-                if (ti:=i.__class__.__name__)!='bool':raise Exception(ti+" is not bool");
+                if (ti:=i.__class__.__name__)!='bool':raise Exception("'{}' is not 'bool'".format(ti));
             return True
         else:raise Exception(ta+" is not bool");
     except Exception as e:retrn('c',e);
 
 # return True if matx
-def tmatx(a:tuple|list,b=None)->bool:
+def tmatx(a:any|tuple|list,b=None)->bool:
     '''
 #### Returns True if all values are matx objects.
 - **a**: List or tuple of values or a value
@@ -170,7 +175,7 @@ def tmatx(a:tuple|list,b=None)->bool:
         if (ta:=a.__class__.__name__)=='matx':return True;
         if (ta=='list' or ta=='tuple') and b is True:
             for i in a:
-                if (ti:=i.__class__.__name__)!='matx':raise Exception(ti+" is not matx");
+                if (ti:=i.__class__.__name__)!='matx':raise Exception("'{}' is not 'matx'".format(ti));
             return True
         else:raise Exception(ta+" is not matx");
     except Exception as e:retrn('c',e);
@@ -186,7 +191,7 @@ def ttup(a:tuple|tuple[tuple,...])->bool:
         if (ta:=a.__class__.__name__)=='tuple':
             if (ta0:=a[0].__class__.__name__)==ta:
                 for i in range(1,len(a)):
-                    if (ti:=a[i].__class__.__name__)!=ta0:raise Exception(ti+" is not tuple");
+                    if (ti:=a[i].__class__.__name__)!=ta0:raise Exception("'{}' is not 'tuple'".format(ti));
                 return True
             else:return True;
         else:raise Exception(ta+" is not tuple");
@@ -202,7 +207,7 @@ def tlist(a:list|list[list])->bool:
         if (ta:=a.__class__.__name__)=='list':
             if (ta0:=a[0].__class__.__name__)==ta:
                 for i in range(1,len(a)):
-                    if (ti:=a[i].__class__.__name__)!=ta0:raise Exception(ti+" is not list");
+                    if (ti:=a[i].__class__.__name__)!=ta0:raise Exception("'{}' is not 'list'".format(ti));
                 return True
             else:return True;
         else:raise Exception(ta+" is not list");
@@ -237,11 +242,23 @@ def tdata(d:list|tuple,b=None)->bool:
         if (td:=d.__class__.__name__)=='data':return True;
         if (td=='list' or td=='tuple') and b is True:
             for i in d:
-                if (ti:=i.__class__.__name__)!='data':raise Exception(ti+" is not data");
+                if (ti:=i.__class__.__name__)!='data':raise Exception("'{}' is not 'data'".format(ti));
             return True
-        else:raise Exception(td+" is not data");
+        else:raise Exception("'{}' is not 'data'".format(td));
     except Exception as e:retrn('c',e);
 
+def tstr(li:str|tuple|list,b=None)->bool:
+    '''
+#### Returns True if type is 'str'
+- **li**: Value or list/tuple of values
+- **b**: True for list/tuple of values and False for a single value
+    '''
+    try:
+        if (tli:=li.__class__.__name__)=='str':return True
+        if (tli=='list' or tli=='tuple') and b is True:
+            for i in li:
+                if i.__class__.__name__!='str':raise Exception("'{}' is not 'str'".format(i.__class__.__name__))
+    except Exception as e:retrn('c',e);
 
 class tfunc:
 
