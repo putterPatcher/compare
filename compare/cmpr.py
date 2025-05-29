@@ -23,7 +23,7 @@ class tint:
     
     # return true if i is valid element index
     @classmethod
-    def ele(cls,i:any|list|tuple,ln:int|float,b=None)->int|tuple[int,...]:
+    def ele(cls,i:list|tuple,ln:int|float,b=None)->int|tuple[int,...]:
         '''
 #### Returns integer of "i" or tuple of integers ( if "i" contains indexes ).
 - **i**: Value or list/tuple of values
@@ -47,7 +47,7 @@ class tint:
 
     # check and return whole numbers
     @classmethod
-    def intw(cls,i:any)->int:
+    def intw(cls,i)->int:
         '''
 #### Returns an integer ( >= 0 ) for value.
 - **i**: Value
@@ -59,7 +59,7 @@ class tint:
 
     # check and return natural numbers
     @classmethod
-    def intn(cls,i:any)->int:
+    def intn(cls,i)->int:
         '''
 #### Returns an integer ( > 0 ) for value.
 - **i**: Value
@@ -71,7 +71,7 @@ class tint:
 
     # check and return int
     @staticmethod
-    def int(i:any)->int:
+    def int(i)->int:
         '''
 #### Returns an integer for value.
 - **i**: Value
@@ -111,7 +111,7 @@ class tdeciml:
 
     # return if positive float
     @staticmethod
-    def decip(a:any,__pr=getpr())->Decimal:
+    def decip(a,__pr=getpr())->Decimal:
         '''
 #### Returns Decimal object ( greater than zero ) for value.
 - **a**: Value
@@ -123,7 +123,7 @@ class tdeciml:
         except Exception as e:retrn('c',e);
 
     @staticmethod
-    def deciml(a:any|list|tuple,b=None)->bool:
+    def deciml(a:list|tuple,b=None)->bool:
         '''
 #### Returns True if all elements are Decimal.
 - **a**: List or tuple of values or a value
@@ -149,7 +149,7 @@ def eqval(a,b)->bool:
     except Exception as e:retrn('c',e);
 
 
-def tbool(a:any|list|tuple,b=None)->bool:
+def tbool(a:list|tuple,b=None)->bool:
     '''
 #### Returns True if all values are boolean.
 - **a**: List or tuple of values or a value
@@ -165,7 +165,7 @@ def tbool(a:any|list|tuple,b=None)->bool:
     except Exception as e:retrn('c',e);
 
 # return True if matx
-def tmatx(a:any|tuple|list,b=None)->bool:
+def tmatx(a:tuple|list,b=None)->bool:
     '''
 #### Returns True if all values are matx objects.
 - **a**: List or tuple of values or a value
