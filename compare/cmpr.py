@@ -268,6 +268,7 @@ def tstr(li:str|tuple|list,b=None)->bool:
         if (tli=='list' or tli=='tuple') and b is True:
             for i in li:
                 if i.__class__.__name__!='str':raise Exception("'{}' is not 'str'".format(i.__class__.__name__))
+            return True
     except Exception as e:retrn('c',e);
 
 class tfunc:
