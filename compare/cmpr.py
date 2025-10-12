@@ -137,6 +137,16 @@ class tdeciml:
             return True
         else:print("{} is not 'list'/'tuple'".format(ta))
 
+def tslice(*x)->bool:
+    '''
+#### Returns True if slice objects
+ - **\*a**: objects
+    '''
+    try:
+        for i in x:
+            if i.__class__.__name__!='slice':raise Exception("{} is not slice".format(i.__class__.__name__))
+        return True
+    except Exception as e:retrn('c',e)
 
 def eqval(a,b)->bool:
     '''
