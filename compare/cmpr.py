@@ -23,11 +23,12 @@ class tint:
     
     # return true if i is valid element index
     @classmethod
-    def ele(cls,i:list|tuple,ln:int|float,b=None)->int|tuple[int,...]:
+    def ele(cls,i:list|tuple|int,ln:int|float,b=None)->int|tuple[int,...]:
         '''
 #### Returns integer of "i" or tuple of integers ( if "i" contains indexes ).
 - **i**: Value or list/tuple of values
 - **ln**: Length to compare
+- **b**: True for list of values
         '''
         try:
             ln=cls.intn(ln)
