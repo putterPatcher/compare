@@ -97,14 +97,14 @@ class tdeciml:
                     for i in li:
                         li2=list()
                         for j in i:
-                            if (j1:=deciml(j,__pr))!=Decimal('NaN') or j1!=Decimal('Inf') or j1!=Decimal('-Inf'):li2.append(j1);
+                            if (j1:=deciml(j,__pr))!=Decimal('NaN') and j1!=Decimal('Inf') and j1!=Decimal('-Inf'):li2.append(j1);
                             else:raise Exception(str(j)+" is NaN/Inf/-Inf");
                         li1.append(tuple(li2))
                     return tuple(li1)
                 else:
                     li1=list()
                     for i in li:
-                        if (i1:=deciml(i,__pr))!=Decimal('NaN') or i1!=Decimal('Inf') or i1!=Decimal('-Inf'):li1.append(i1);
+                        if (i1:=deciml(i,__pr))!=Decimal('NaN') and i1!=Decimal('Inf') and i1!=Decimal('-Inf'):li1.append(i1);
                         else:raise Exception(str(i)+" is NaN/Inf/-Inf");
                     return tuple(li1)
             else:raise Exception;
@@ -119,7 +119,7 @@ class tdeciml:
 - **__pr**: Precision
         '''
         try:
-            if (an:=deciml(a,__pr))>0 or an!=Decimal('NaN') or an!=Decimal('Inf') or an!=Decimal('-Inf'):return an;
+            if (an:=deciml(a,__pr))>0 and an!=Decimal('NaN') and an!=Decimal('Inf') and an!=Decimal('-Inf'):return an;
             else:raise Exception(str(a)+" is <=0/NaN/Inf/-Inf");  
         except Exception as e:retrn('c',e);
 
